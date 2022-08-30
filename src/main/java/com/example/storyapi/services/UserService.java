@@ -1,12 +1,11 @@
 package com.example.storyapi.services;
 
-import com.example.storyapi.models.Users;
+import com.example.storyapi.models.User;
 import com.example.storyapi.repositories.UserRepository;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,36 +13,38 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<Users> getAllUsers(){
-        List<Users> users = new ArrayList<>();
-        userRepository.findAll().forEach(users :: add);
-        return users;
+    public Iterable<User> getAllUsers(){
+        return userRepository.findAll();
     }
-    public void addUser(Users users){
-        System.out.println(users.getEmail()+" "+users.getPassword());
-        userRepository.save(users);
+    public User addUser(User user){
+        return userRepository.save(user);
     }
 
-    public Optional<Users> getUser(int id){
+    public Optional<User> getUser(int id){
         return userRepository.findById(id);
     }
 
-    public String updateUser(String email, Users users){
-        if (userRepository.existsByEmail(email)){
-            Users users1 =  userRepository.findByEmail(email);
-            int userId = users1.getId();
-            userRepository.findById(userId)
-                    .map(u -> {
-                        u.setEmail(users.getEmail());
-                        u.setPassword(users.getPassword());
-                        return userRepository.save(u);
-                    });
-            return "updated";
+    public Optional<User> updateUser(String email, User user){
+        Optional<User> userObj =  userRepository.findByEmail(email);
+        if (userObj.isEmpty()){
+            return Optional.empty();
         }
-        return "Email not Found";
+        if (!Strings.isBlank(user.getEmail())) {
+            userObj.get().setEmail(user.getEmail());
+        }
+        if (!Strings.isBlank(user.getPassword())) {
+            userObj.get().setPassword(user.getPassword());
+        }
+        userRepository.save(userObj.get());
+        return userObj;
     }
 
-    public void deleteUser(Users users){
-        userRepository.deleteById(users.getId());
+    public Optional<User> deleteUser(int id){
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()){
+            userRepository.deleteById(id);
+            return user;
+        }
+        return null;
     }
 }
