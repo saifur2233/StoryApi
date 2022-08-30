@@ -31,9 +31,7 @@ public class UserService {
     public String updateUser(String email, Users users){
         if (userRepository.existsByEmail(email)){
             Users users1 =  userRepository.findByEmail(email);
-            //System.out.println(users1.getId());
             int userId = users1.getId();
-            //System.out.println(userId);
             userRepository.findById(userId)
                     .map(u -> {
                         u.setEmail(users.getEmail());
