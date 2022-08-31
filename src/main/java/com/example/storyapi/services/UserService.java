@@ -16,9 +16,6 @@ public class UserService {
     public Iterable<User> getAllUsers(){
         return userRepository.findAll();
     }
-    public User addUser(User user){
-        return userRepository.save(user);
-    }
 
     public Optional<User> getUser(int id){
         return userRepository.findById(id);
@@ -28,10 +25,13 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public Optional<User> updateUser(String email, User user){
-        Optional<User> userObj =  userRepository.findByEmail(email);
+    public Optional<User> updateUser(int id, User user){
+        Optional<User> userObj =  userRepository.findById(id);
         if (userObj.isEmpty()){
             return Optional.empty();
+        }
+        if (!Strings.isBlank(user.getName())) {
+            userObj.get().setName(user.getName());
         }
         if (!Strings.isBlank(user.getEmail())) {
             userObj.get().setEmail(user.getEmail());
