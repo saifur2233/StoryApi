@@ -22,16 +22,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
     }
 
-
-    @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(userService.addUser(user));
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
-
     @GetMapping(value = "/{id}")
     public ResponseEntity<Optional<User>> getUser(@PathVariable int id) {
         Optional<User> user = userService.getUser(id);
@@ -46,9 +36,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @PutMapping(value = "/{email}")
-    public ResponseEntity<Optional<User>> updateUser(@PathVariable String email, @RequestBody User user){
-        Optional<User> updated = userService.updateUser(email, user);
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Optional<User>> updateUser(@PathVariable int id, @RequestBody User user){
+        Optional<User> updated = userService.updateUser(id, user);
         if (updated.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
