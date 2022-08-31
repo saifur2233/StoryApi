@@ -45,6 +45,6 @@ public class UserService {
             userRepository.deleteById(id);
             return user;
         }
-        return null;
+        return Optional.empty();
     }
 }

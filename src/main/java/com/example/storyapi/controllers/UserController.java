@@ -45,10 +45,10 @@ public class UserController {
         if (updated.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Optional<User>> deleteUser(@PathVariable int id){
         Optional<User> user = userService.deleteUser(id);
-        if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        if (user.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
