@@ -19,7 +19,9 @@ public class AuthController {
     @PostMapping(value = "/signup")
     public ResponseEntity<User> signUp(@RequestBody User user){
         try{
-            return ResponseEntity.status(HttpStatus.CREATED).body(authService.signUp(user));
+            User signupUser = authService.signUp(user);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(signupUser);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
