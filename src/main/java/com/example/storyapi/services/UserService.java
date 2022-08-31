@@ -35,6 +35,9 @@ public class UserService {
         if (!Strings.isBlank(user.getPassword())) {
             userObj.get().setPassword(user.getPassword());
         }
+        if (!Strings.isBlank(user.getPhoneNumber())) {
+            userObj.get().setPhoneNumber(user.getPhoneNumber());
+        }
         userRepository.save(userObj.get());
         return userObj;
     }

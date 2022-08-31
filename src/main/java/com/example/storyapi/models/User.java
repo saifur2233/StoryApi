@@ -25,6 +25,8 @@ public class User {
             flags = Pattern.Flag.CASE_INSENSITIVE)
     private String  email;
 
+    private String phoneNumber;
+
     @Pattern(regexp ="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9@$!%*?&]{8,}")
     private String password;
 
