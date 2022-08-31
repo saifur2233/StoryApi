@@ -39,6 +39,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
+    @GetMapping(value = "/email/{email}")
+    public ResponseEntity<Optional<User>> getUserByEamil(@PathVariable String email) {
+        Optional<User> user = userService.getUserByEamil(email);
+        if (user.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
     @PutMapping(value = "/{email}")
     public ResponseEntity<Optional<User>> updateUser(@PathVariable String email, @RequestBody User user){
         Optional<User> updated = userService.updateUser(email, user);
