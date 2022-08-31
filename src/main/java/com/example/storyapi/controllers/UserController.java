@@ -32,8 +32,12 @@ public class UserController {
     @PutMapping(value = "/{id}")
     public ResponseEntity<Optional<User>> updateUser(@PathVariable int id, @RequestBody User user){
         Optional<User> updated = userService.updateUser(id, user);
-        if (updated.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        return ResponseEntity.status(HttpStatus.OK).body(updated);
+        try{
+            if (updated.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.OK).body(updated);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Optional<User>> deleteUser(@PathVariable int id){
