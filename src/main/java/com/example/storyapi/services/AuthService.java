@@ -18,9 +18,8 @@ public class AuthService {
 
     public Optional<User> signIn(User user){
         Optional<User> validUser = userRepository.findByEmail(user.getEmail());
-        if(validUser.isPresent() && validUser.get().getPassword().equals(user.getPassword())){
-            return validUser;
-        }
+        if (validUser.isEmpty()) return Optional.empty();
+        if(validUser.get().getPassword().equals(user.getPassword())) return validUser;
         return Optional.empty();
     }
 }
