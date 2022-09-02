@@ -26,18 +26,10 @@ public class UserService {
         if (userObj.isEmpty()){
             return Optional.empty();
         }
-        if (!Strings.isBlank(user.getName())) {
-            userObj.get().setName(user.getName());
-        }
-        if (!Strings.isBlank(user.getEmail())) {
-            userObj.get().setEmail(user.getEmail());
-        }
-        if (!Strings.isBlank(user.getPassword())) {
-            userObj.get().setPassword(user.getPassword());
-        }
-        if (!Strings.isBlank(user.getPhoneNumber())) {
-            userObj.get().setPhoneNumber(user.getPhoneNumber());
-        }
+        userObj.get().setName(user.getName());
+        userObj.get().setEmail(user.getEmail());
+        userObj.get().setPassword(user.getPassword());
+        userObj.get().setPhoneNumber(user.getPhoneNumber());
         userRepository.save(userObj.get());
         return userObj;
     }
