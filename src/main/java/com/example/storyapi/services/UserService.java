@@ -2,7 +2,7 @@ package com.example.storyapi.services;
 
 import com.example.storyapi.models.User;
 import com.example.storyapi.repositories.UserRepository;
-import org.apache.logging.log4j.util.Strings;
+import com.example.storyapi.utils.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,32 +14,38 @@ public class UserService {
     private UserRepository userRepository;
 
     public Iterable<User> getAllUsers(){
-        return userRepository.findAll();
+        Iterable<User> user = userRepository.findAll();
+        if(user == null){
+            throw new EntityNotFoundException(User.class);
+        }
+        return user;
     }
 
-    public Optional<User> getUser(int id){
-        return userRepository.findById(id);
+    public User getUser(int id){
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+        return user.get();
     }
 
-    public Optional<User> updateUser(int id, User user){
+    public User updateUser(int id, User user){
         Optional<User> userObj =  userRepository.findById(id);
         if (userObj.isEmpty()){
-            return Optional.empty();
+            throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
         }
         userObj.get().setName(user.getName());
         userObj.get().setEmail(user.getEmail());
         userObj.get().setPassword(user.getPassword());
         userObj.get().setPhoneNumber(user.getPhoneNumber());
         userRepository.save(userObj.get());
-        return userObj;
+        return userObj.get();
     }
 
-    public Optional<User> deleteUser(int id){
+    public User deleteUser(int id){
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()){
             userRepository.deleteById(id);
-            return user;
+            return user.get();
         }
-        return Optional.empty();
+        throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
     }
 }
