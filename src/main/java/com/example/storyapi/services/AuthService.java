@@ -18,10 +18,10 @@ public class AuthService {
         return userRepository.save(user);
     }
 
-    public User signIn(User user){
+    public Optional<User> signIn(User user){
         Optional<User> validUser = userRepository.findByEmail(user.getEmail());
         if (validUser.isEmpty()) throw new EntityNotFoundException(User.class, "Email", user.getEmail());
-        if(validUser.get().getPassword().equals(user.getPassword())) return validUser.get();
-        return null;
+        if(validUser.get().getPassword().equals(user.getPassword())) return validUser;
+        return Optional.empty();
     }
 }

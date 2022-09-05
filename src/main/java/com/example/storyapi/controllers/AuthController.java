@@ -23,8 +23,11 @@ public class AuthController {
     }
 
     @PostMapping(value = "/signin")
-    public ResponseEntity<User> signIn(@RequestBody User user){
-        User loggedUser = authService.signIn(user);
+    public ResponseEntity<? extends Object> signIn(@RequestBody User user){
+        Optional<User> loggedUser = authService.signIn(user);
+        if (loggedUser.isEmpty()) {
+            return new ResponseEntity<>("Password didn't not match", HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(loggedUser);
     }
 }

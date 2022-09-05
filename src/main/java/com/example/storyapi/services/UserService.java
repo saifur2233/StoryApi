@@ -14,11 +14,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public Iterable<User> getAllUsers(){
-        Iterable<User> user = userRepository.findAll();
-        if(user == null){
-            throw new EntityNotFoundException(User.class);
-        }
-        return user;
+        return userRepository.findAll();
     }
 
     public User getUser(int id){
