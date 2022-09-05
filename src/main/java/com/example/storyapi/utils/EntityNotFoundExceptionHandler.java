@@ -8,10 +8,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 
 @Component
-public class EntityNotFoundExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler{
+public class EntityNotFoundExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<EntityNotFoundException>{
     @Override
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Object> handleException(RuntimeException runtimeException) {
+    public ResponseEntity<Object> handleException(EntityNotFoundException runtimeException) {
         ApiError apiError = new ApiError();
         apiError.message.add(runtimeException.getMessage());
         apiError.setStatus(HttpStatus.NOT_FOUND);

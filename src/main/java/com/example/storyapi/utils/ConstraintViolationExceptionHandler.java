@@ -13,13 +13,12 @@ import java.time.LocalDateTime;
 
 @Component
 @ControllerAdvice
-public class ConstraintViolationExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler{
+public class ConstraintViolationExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<ConstraintViolationException> {
     @Override
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Object> handleException(RuntimeException ex) {
-        ConstraintViolationException consEx = ((ConstraintViolationException) ex);
+    public ResponseEntity<Object> handleException(ConstraintViolationException ex) {
         ApiError apiError = new ApiError();
-        for (ConstraintViolation violation : consEx.getConstraintViolations()) {
+        for (ConstraintViolation violation : ex.getConstraintViolations()) {
             apiError.message.add(violation.getPropertyPath() + ": " + violation.getMessage());
         }
         apiError.setTimestamp(LocalDateTime.now());
