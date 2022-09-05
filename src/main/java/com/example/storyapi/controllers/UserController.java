@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @RestController
@@ -18,31 +19,23 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Iterable<User>> getAllUsers(){
         Iterable<User> user = userService.getAllUsers();
-        if (user == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Optional<User>> getUser(@PathVariable int id) {
-        Optional<User> user = userService.getUser(id);
-        if (user.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<User> getUser(@PathVariable int id) {
+        User user = userService.getUser(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Optional<User>> updateUser(@PathVariable int id, @RequestBody User user){
-        Optional<User> updated = userService.updateUser(id, user);
-        try{
-            if (updated.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            return ResponseEntity.status(HttpStatus.OK).body(updated);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user){
+        User updated = userService.updateUser(id, user);
+        return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Optional<User>> deleteUser(@PathVariable int id){
-        Optional<User> user = userService.deleteUser(id);
-        if (user.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<User> deleteUser(@PathVariable int id){
+        userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

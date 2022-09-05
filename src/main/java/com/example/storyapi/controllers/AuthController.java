@@ -18,19 +18,13 @@ public class AuthController {
 
     @PostMapping(value = "/signup")
     public ResponseEntity<User> signUp(@RequestBody User user){
-        try{
-            User signupUser = authService.signUp(user);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(signupUser);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        User signupUser = authService.signUp(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(signupUser);
     }
 
     @PostMapping(value = "/signin")
-    public ResponseEntity<Optional<User>> signIn(@RequestBody User user){
-        Optional<User> loggedUser = authService.signIn(user);
-        if (loggedUser.isEmpty()) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    public ResponseEntity<User> signIn(@RequestBody User user){
+        User loggedUser = authService.signIn(user);
         return ResponseEntity.status(HttpStatus.OK).body(loggedUser);
     }
 }
