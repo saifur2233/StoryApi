@@ -32,9 +32,4 @@ public class AuthService {
 
     }
 
-    public Users loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Users> findUser = userRepository.findByEmail(email);
-        return findUser.get();
-    }
-
 }
