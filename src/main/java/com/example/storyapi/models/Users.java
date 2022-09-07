@@ -1,9 +1,9 @@
 package com.example.storyapi.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -11,7 +11,8 @@ import javax.validation.constraints.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+public class Users{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
