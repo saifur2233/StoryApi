@@ -4,6 +4,7 @@ import com.example.storyapi.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -17,8 +18,8 @@ public class JWTUtility implements Serializable {
     private static final long serialVersionUID = 234234523523L;
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
-
-    private String secretKey = "saifur";
+    @Value("{secretKey}")
+    private String secretKey;
 
     // retrive username from jwt token
     public String getEmailFromToken(String token){
@@ -54,7 +55,7 @@ public class JWTUtility implements Serializable {
 
     //while creating the token
     //1. Define claims of the token
-    //2. sign the JWt using the HS512 algorithm and scret key.
+    //2. sign the JWt using the HS512 algorithm and secret key.
 
     private String doGenerateToekn(Map<String, Object> claims, String subject){
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
