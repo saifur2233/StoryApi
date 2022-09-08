@@ -33,7 +33,9 @@ public class User {
     @NotEmpty(message = "User phone number can't empty")
     private String phoneNumber;
 
-    @Pattern(regexp ="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9@$!%*?&]{8,}", message ="User password can't empty" )
+    @NotNull
+    @NotBlank
+    @NotEmpty(message ="User password can't empty")
     private String password;
 
     private LocalDateTime created_At = LocalDateTime.now();
