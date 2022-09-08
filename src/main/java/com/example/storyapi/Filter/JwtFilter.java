@@ -1,6 +1,6 @@
 package com.example.storyapi.Filter;
 
-import com.example.storyapi.models.Users;
+import com.example.storyapi.models.User;
 import com.example.storyapi.security.JWTUtility;
 import com.example.storyapi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +37,10 @@ public class JwtFilter extends OncePerRequestFilter{
         }
 
         if(null != email && SecurityContextHolder.getContext().getAuthentication() == null){
-            Users users = userService.loadUserByEmail(email);
-            if (jwtUtility.validateToken(token, users)){
+            User user = userService.loadUserByEmail(email);
+            if (jwtUtility.validateToken(token, user)){
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(users, null, null);
+                        new UsernamePasswordAuthenticationToken(user, null, null);
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
