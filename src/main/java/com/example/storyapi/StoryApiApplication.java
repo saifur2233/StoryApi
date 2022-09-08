@@ -15,9 +15,6 @@ public class StoryApiApplication {
         SpringApplication.run(StoryApiApplication.class, args);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
-    }
+
 
 }
