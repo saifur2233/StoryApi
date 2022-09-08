@@ -25,7 +25,8 @@ public class AuthService {
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setPhoneNumber(user.getPhoneNumber());
-        return userRepository.save(newUser);
+        System.out.println(newUser.getPassword());
+        return userRepository.save(user);
     }
 
     public Optional<User> signIn(User user){
