@@ -19,10 +19,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        System.out.println("Filter 2");
         http.csrf()
                 .disable()
-                .authorizeRequests().antMatchers("/auth", "/signup","/signin").permitAll()
+                .authorizeRequests().antMatchers( "/signup","/signin").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

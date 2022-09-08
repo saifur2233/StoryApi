@@ -1,6 +1,6 @@
 package com.example.storyapi.services;
 
-import com.example.storyapi.models.Users;
+import com.example.storyapi.models.User;
 import com.example.storyapi.repositories.UserRepository;
 import com.example.storyapi.utils.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,41 +13,41 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Iterable<Users> getAllUsers(){
+    public Iterable<User> getAllUsers(){
         return userRepository.findAll();
     }
 
-    public Users getUser(int id){
-        Optional<Users> user = userRepository.findById(id);
-        if (user.isEmpty()) throw new EntityNotFoundException(Users.class, "id", String.valueOf(id));
+    public User getUser(int id){
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
         return user.get();
     }
 
-    public Users updateUser(int id, Users users){
-        Optional<Users> userObj =  userRepository.findById(id);
+    public User updateUser(int id, User user){
+        Optional<User> userObj =  userRepository.findById(id);
         if (userObj.isEmpty()){
-            throw new EntityNotFoundException(Users.class, "id", String.valueOf(id));
+            throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
         }
-        userObj.get().setName(users.getName());
-        userObj.get().setEmail(users.getEmail());
-        userObj.get().setPassword(users.getPassword());
-        userObj.get().setPhoneNumber(users.getPhoneNumber());
+        userObj.get().setName(user.getName());
+        userObj.get().setEmail(user.getEmail());
+        userObj.get().setPassword(user.getPassword());
+        userObj.get().setPhoneNumber(user.getPhoneNumber());
         userRepository.save(userObj.get());
         return userObj.get();
     }
 
-    public Users deleteUser(int id){
-        Optional<Users> user = userRepository.findById(id);
+    public User deleteUser(int id){
+        Optional<User> user = userRepository.findById(id);
         if (user.isPresent()){
             userRepository.deleteById(id);
             return user.get();
         }
-        throw new EntityNotFoundException(Users.class, "id", String.valueOf(id));
+        throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
     }
 
-    public Users loadUserByEmail(String email) {
-        Optional<Users> findUser = userRepository.findByEmail(email);
-        if (findUser.isEmpty()) throw new EntityNotFoundException(Users.class, "email", email);
+    public User loadUserByEmail(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+        if (findUser.isEmpty()) throw new EntityNotFoundException(User.class, "email", email);
         return findUser.get();
     }
 }

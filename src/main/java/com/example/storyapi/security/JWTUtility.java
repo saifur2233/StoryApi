@@ -1,6 +1,6 @@
 package com.example.storyapi.security;
 
-import com.example.storyapi.models.Users;
+import com.example.storyapi.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -47,7 +47,7 @@ public class JWTUtility implements Serializable {
     }
 
     //generate token from user
-    public String generateToken(Users user){
+    public String generateToken(User user){
         Map<String, Object> claims = new HashMap<>();
         return doGenerateToekn(claims, user.getEmail());
     }
@@ -63,9 +63,8 @@ public class JWTUtility implements Serializable {
     }
 
     //validate token
-    public Boolean validateToken(String token, Users user){
+    public Boolean validateToken(String token, User user){
         final String email = getEmailFromToken(token);
-        System.out.println("Email "+email);
         return (email.equals(user.getEmail()) && !isTokenExpired(token));
     }
 }
