@@ -15,7 +15,7 @@ public class JwtService {
     @Autowired
     private UserService userService;
 
-    public JwtResponse authenticate(@RequestBody User users) throws Exception{
+    public JwtResponse authenticate(@RequestBody User users) {
         final User user = userService.loadUserByEmail(users.getEmail());
         final String token  = jwtUtility.generateToken(user);
         return new JwtResponse(token);
