@@ -21,15 +21,15 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
-    @PostMapping(value = "/signup")
+    @PostMapping(value = "/api/v1/signup")
     public ResponseEntity<?> signUp(@RequestBody User user) {
         User signupUser = authService.signUp(user);
         JwtResponse token = jwtService.authenticate(signupUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
-    @PostMapping(value = "/signin")
-    public ResponseEntity<?> signIn(@RequestBody User user) {
+    @PostMapping(value = "/api/v1/signin")
+    public ResponseEntity<?> signIn(@RequestBody User user){
         Optional<User> loggedUser = authService.signIn(user);
         if (loggedUser.isEmpty()) {
             return new ResponseEntity<>("Password didn't not match", HttpStatus.BAD_REQUEST);

@@ -36,7 +36,7 @@ public class StoryService {
         }
         storyObj.get().setTitle(story.getTitle());
         storyObj.get().setDescription(story.getDescription());
-        storyObj.get().setAuthorEmail(story.getAuthorEmail());
+        storyObj.get().setAuthor(story.getAuthor());
         storyRepository.save(storyObj.get());
         return storyObj.get();
     }
