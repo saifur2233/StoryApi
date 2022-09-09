@@ -28,19 +28,22 @@ public class UserService {
         if (userObj.isEmpty()){
             throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
         }
-        userObj.get().setName(user.getName());
-        userObj.get().setEmail(user.getEmail());
-        userObj.get().setPassword(user.getPassword());
-        userObj.get().setPhoneNumber(user.getPhoneNumber());
+        setUserProperties(userObj.get(), user);
         userRepository.save(userObj.get());
         return userObj.get();
     }
 
-    public User deleteUser(int id){
+    protected void setUserProperties(User currentUser, User user) {
+        currentUser.setName(user.getName());
+        currentUser.setEmail(user.getEmail());
+        currentUser.setPassword(user.getPassword());
+        currentUser.setPhoneNumber(user.getPhoneNumber());
+    }
+
+    public void deleteUser(int id){
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()){
             userRepository.deleteById(id);
-            return user.get();
         }
         throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
     }

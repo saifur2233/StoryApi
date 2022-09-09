@@ -22,19 +22,19 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping(value = "/signup")
-    public ResponseEntity<? extends Object> signUp(@RequestBody User user) throws Exception {
+    public ResponseEntity<?> signUp(@RequestBody User user) {
         User signupUser = authService.signUp(user);
         JwtResponse token = jwtService.authenticate(signupUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
     @PostMapping(value = "/signin")
-    public ResponseEntity<? extends Object> signIn(@RequestBody User user) throws Exception{
+    public ResponseEntity<?> signIn(@RequestBody User user) {
         Optional<User> loggedUser = authService.signIn(user);
-        JwtResponse token = jwtService.authenticate(loggedUser.get());
         if (loggedUser.isEmpty()) {
             return new ResponseEntity<>("Password didn't not match", HttpStatus.BAD_REQUEST);
         }
+        JwtResponse token = jwtService.authenticate(loggedUser.get());
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 }

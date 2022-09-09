@@ -13,9 +13,6 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
-
-    @Autowired
-    private PasswordEncrypt passwordEncrypt;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -23,15 +20,9 @@ public class AuthService {
     @Autowired
     private JWTUtility jwtUtility;
     public User signUp(User user){
-
         if(PasswordEncrypt.isValid(user.getPassword())){
-            User newUser = new User();
-            newUser.setName(user.getName());
-            newUser.setEmail(user.getEmail());
-            newUser.setPhoneNumber(user.getPhoneNumber());
-            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            System.out.println(newUser.getPassword());
-            return userRepository.save(newUser);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userRepository.save(user);
         }
         throw new InvalidPropertiesFormatException(User.class,"Password not found", user.getPassword());
     }
