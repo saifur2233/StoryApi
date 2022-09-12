@@ -3,8 +3,8 @@ package com.example.storyapi.services;
 import com.example.storyapi.exceptions.EntityNotFoundException;
 import com.example.storyapi.models.Story;
 import com.example.storyapi.repositories.StoryRepository;
-import com.example.storyapi.utils.ProtectCreateStoryApi;
-import com.example.storyapi.utils.ProtectStoryApi;
+import com.example.storyapi.utils.CreateStoryRouteProtection;
+import com.example.storyapi.utils.StoryRouteProtection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +16,10 @@ public class StoryService {
     private StoryRepository storyRepository;
 
     @Autowired
-    private ProtectStoryApi protectStoryApi;
+    private StoryRouteProtection routeProtection;
 
     @Autowired
-    private ProtectCreateStoryApi protectCreateStoryApi;
+    private CreateStoryRouteProtection createStoryRouteProtection;
 
     public Iterable<Story> getAllStories(){
         return storyRepository.findAll();
@@ -32,17 +32,17 @@ public class StoryService {
     }
 
     public Story createStory(Story story){
-        int authorId = protectCreateStoryApi.checkUserValidation();
+        int authorId = createStoryRouteProtection.checkUserValidation();
         story.setAuthor(authorId);
         return storyRepository.save(story);
     }
 
     public Story updateStory(Integer id, Story story){
-        protectStoryApi.checkUserValidation(id);
         Optional<Story> storyObj =  storyRepository.findById(id);
         if (storyObj.isEmpty()){
             throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
         }
+        routeProtection.checkUserValidation(storyObj.get().getAuthor());
         setUserProperties(storyObj.get(), story);
         return storyRepository.save(storyObj.get());
     }
@@ -52,12 +52,10 @@ public class StoryService {
         currentStory.setDescription(story.getDescription());
     }
     public void deleteStory(Integer id){
-        protectStoryApi.checkUserValidation(id);
         Optional<Story> story = storyRepository.findById(id);
-        if (story.isPresent()){
-            storyRepository.deleteById(id);
-        }
-        throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
+        if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
+        routeProtection.checkUserValidation(story.get().getAuthor());
+        storyRepository.deleteById(id);
     }
 
 
