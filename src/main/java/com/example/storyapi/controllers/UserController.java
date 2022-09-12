@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/users")
+@RequestMapping(path = "${apiPrefix}")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -20,18 +20,18 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Users> getUser(@PathVariable int id) {
+    public ResponseEntity<Users> getUser(@PathVariable Integer id) {
         Users users = userService.getUser(id);
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Users> updateUser(@PathVariable int id, @RequestBody Users users){
+    public ResponseEntity<Users> updateUser(@PathVariable Integer id, @RequestBody Users users){
         Users updated = userService.updateUser(id, users);
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Users> deleteUser(@PathVariable int id){
+    public ResponseEntity<Users> deleteUser(@PathVariable Integer id){
         userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -17,7 +17,7 @@ public class GetUserEmail {
     public String secured(){
         Authentication authentication = authenticationFacade.getAuthentication();
         if (authentication.isAuthenticated()) return authentication.getName();
-        throw new AccessDeniedException(Story.class,"access denied","user");
+        throw new AccessDeniedException("access denied","user");
     }
 
 

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/v1/stories")
+@RequestMapping(path = "${apiPrefix}/stories")
 public class StoryController {
 
     @Autowired

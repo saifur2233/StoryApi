@@ -24,7 +24,9 @@ public class SecurityConfiguration {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()
-                .authorizeRequests().antMatchers( "/signup","/signin","/api/v1/stories","/api/v1/stories/{id}").permitAll()
+                .authorizeRequests()
+                .antMatchers( "/api/v1/users/signup","/api/v1/users/signin","/api/v1/users/stories","/api/v1/users/stories/{id}", "/api/v1/users", "/api/v1/users/{id}")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
