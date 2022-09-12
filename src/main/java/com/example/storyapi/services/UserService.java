@@ -1,8 +1,8 @@
 package com.example.storyapi.services;
 
-import com.example.storyapi.models.User;
+import com.example.storyapi.exceptions.EntityNotFoundException;
+import com.example.storyapi.models.Users;
 import com.example.storyapi.repositories.UserRepository;
-import com.example.storyapi.utils.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,44 +13,44 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Iterable<User> getAllUsers(){
+    public Iterable<Users> getAllUsers(){
         return userRepository.findAll();
     }
 
-    public User getUser(int id){
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+    public Users getUser(int id){
+        Optional<Users> user = userRepository.findById(id);
+        if (user.isEmpty()) throw new EntityNotFoundException(Users.class, "id", String.valueOf(id));
         return user.get();
     }
 
-    public User updateUser(int id, User user){
-        Optional<User> userObj =  userRepository.findById(id);
+    public Users updateUser(int id, Users users){
+        Optional<Users> userObj =  userRepository.findById(id);
         if (userObj.isEmpty()){
-            throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+            throw new EntityNotFoundException(Users.class, "id", String.valueOf(id));
         }
-        setUserProperties(userObj.get(), user);
+        setUserProperties(userObj.get(), users);
         userRepository.save(userObj.get());
         return userObj.get();
     }
 
-    protected void setUserProperties(User currentUser, User user) {
-        currentUser.setName(user.getName());
-        currentUser.setEmail(user.getEmail());
-        currentUser.setPassword(user.getPassword());
-        currentUser.setPhoneNumber(user.getPhoneNumber());
+    protected void setUserProperties(Users currentUsers, Users users) {
+        currentUsers.setName(users.getName());
+        currentUsers.setEmail(users.getEmail());
+        currentUsers.setPassword(users.getPassword());
+        currentUsers.setPhoneNumber(users.getPhoneNumber());
     }
 
     public void deleteUser(int id){
-        Optional<User> user = userRepository.findById(id);
+        Optional<Users> user = userRepository.findById(id);
         if (user.isPresent()){
             userRepository.deleteById(id);
         }
-        throw new EntityNotFoundException(User.class, "id", String.valueOf(id));
+        throw new EntityNotFoundException(Users.class, "id", String.valueOf(id));
     }
 
-    public User loadUserByEmail(String email) {
-        Optional<User> findUser = userRepository.findByEmail(email);
-        if (findUser.isEmpty()) throw new EntityNotFoundException(User.class, "email", email);
+    public Users loadUserByEmail(String email) {
+        Optional<Users> findUser = userRepository.findByEmail(email);
+        if (findUser.isEmpty()) throw new EntityNotFoundException(Users.class, "email", email);
         return findUser.get();
     }
 }

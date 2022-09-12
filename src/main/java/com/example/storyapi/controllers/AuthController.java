@@ -1,7 +1,7 @@
 package com.example.storyapi.controllers;
 
 import com.example.storyapi.models.JwtResponse;
-import com.example.storyapi.models.User;
+import com.example.storyapi.models.Users;
 import com.example.storyapi.services.AuthService;
 import com.example.storyapi.services.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +21,20 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
 
-    @PostMapping(value = "/api/v1/signup")
-    public ResponseEntity<?> signUp(@RequestBody User user) {
-        User signupUser = authService.signUp(user);
-        JwtResponse token = jwtService.authenticate(signupUser);
+    @PostMapping(value = "/signup")
+    public ResponseEntity<?> signUp(@RequestBody Users users){
+        Users signupUsers = authService.signUp(users);
+        JwtResponse token = jwtService.authenticate(signupUsers.getEmail());
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
-    @PostMapping(value = "/api/v1/signin")
-    public ResponseEntity<?> signIn(@RequestBody User user){
-        Optional<User> loggedUser = authService.signIn(user);
+    @PostMapping(value = "/signin")
+    public ResponseEntity<?> signIn(@RequestBody Users users){
+        Optional<Users> loggedUser = authService.signIn(users);
         if (loggedUser.isEmpty()) {
-            return new ResponseEntity<>("Password didn't not match", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Password didn't not match", HttpStatus.UNAUTHORIZED);
         }
-        JwtResponse token = jwtService.authenticate(loggedUser.get());
+        JwtResponse token = jwtService.authenticate(loggedUser.get().getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 }

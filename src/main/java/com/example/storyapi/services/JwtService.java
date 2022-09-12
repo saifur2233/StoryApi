@@ -1,23 +1,24 @@
 package com.example.storyapi.services;
 
 import com.example.storyapi.models.JwtResponse;
-import com.example.storyapi.models.User;
+import com.example.storyapi.models.Users;
 import com.example.storyapi.security.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
-@Component
+
+@Service
 public class JwtService {
 
     @Autowired
     private JWTUtility jwtUtility;
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceInfo userDetailsServiceInfo;
 
-    public JwtResponse authenticate(@RequestBody User users) {
-        final User user = userService.loadUserByEmail(users.getEmail());
-        final String token  = jwtUtility.generateToken(user);
+    public JwtResponse authenticate(String email) {
+        final UserDetails userDetails = userDetailsServiceInfo.loadUserByUsername(email);
+        final String token  = jwtUtility.generateToken(userDetails);
         return new JwtResponse(token);
     }
 }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,5 +39,10 @@ public class User {
     private String password;
 
     private LocalDateTime created_At = LocalDateTime.now();
+
+    public Users(String email, String password){
+        this.email = email;
+        this.password = password;
+    }
 
 }

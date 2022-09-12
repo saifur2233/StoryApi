@@ -1,4 +1,4 @@
-package com.example.storyapi.utils;
+package com.example.storyapi.exceptions;
 
 public class InvalidPropertiesFormatException extends RuntimeException {
     public InvalidPropertiesFormatException(Class clazz, String key, String value) {

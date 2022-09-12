@@ -1,10 +1,11 @@
 package com.example.storyapi.security;
 
-import com.example.storyapi.models.User;
+import com.example.storyapi.models.Users;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
@@ -48,9 +49,9 @@ public class JWTUtility implements Serializable {
     }
 
     //generate token from user
-    public String generateToken(User user){
+    public String generateToken(UserDetails userDetails){
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, user.getEmail());
+        return doGenerateToken(claims, userDetails.getUsername());
     }
 
     //while creating the token
@@ -64,8 +65,8 @@ public class JWTUtility implements Serializable {
     }
 
     //validate token
-    public Boolean validateToken(String token, User user){
-        final String email = getEmailFromToken(token);
-        return (email.equals(user.getEmail()) && !isTokenExpired(token));
+    public Boolean validateToken(String token, UserDetails userDetails){
+        final String username = getEmailFromToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

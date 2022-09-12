@@ -1,10 +1,10 @@
 package com.example.storyapi.services;
 
+import com.example.storyapi.exceptions.EntityNotFoundException;
 import com.example.storyapi.models.Story;
-import com.example.storyapi.models.User;
 import com.example.storyapi.repositories.StoryRepository;
-import com.example.storyapi.repositories.UserRepository;
-import com.example.storyapi.utils.EntityNotFoundException;
+import com.example.storyapi.utils.ProtectCreateStoryApi;
+import com.example.storyapi.utils.ProtectStoryApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,38 +15,50 @@ public class StoryService {
     @Autowired
     private StoryRepository storyRepository;
 
+    @Autowired
+    private ProtectStoryApi protectStoryApi;
+
+    @Autowired
+    private ProtectCreateStoryApi protectCreateStoryApi;
+
     public Iterable<Story> getAllStories(){
         return storyRepository.findAll();
     }
 
-    public Story getStory(int id){
+    public Story getStory(Integer id){
         Optional<Story> story = storyRepository.findById(id);
         if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
         return story.get();
     }
 
     public Story createStory(Story story){
+        int authorId = protectCreateStoryApi.checkUserValidation();
+        story.setAuthor(authorId);
         return storyRepository.save(story);
     }
 
-    public Story updateStory(int id, Story story){
+    public Story updateStory(Integer id, Story story){
+        protectStoryApi.checkUserValidation(id);
         Optional<Story> storyObj =  storyRepository.findById(id);
         if (storyObj.isEmpty()){
             throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
         }
-        storyObj.get().setTitle(story.getTitle());
-        storyObj.get().setDescription(story.getDescription());
-        storyObj.get().setAuthor(story.getAuthor());
-        storyRepository.save(storyObj.get());
-        return storyObj.get();
+        setUserProperties(storyObj.get(), story);
+        return storyRepository.save(storyObj.get());
     }
 
-    public Story deleteStory(int id){
+    protected void setUserProperties(Story currentStory, Story story) {
+        currentStory.setTitle(story.getTitle());
+        currentStory.setDescription(story.getDescription());
+    }
+    public void deleteStory(Integer id){
+        protectStoryApi.checkUserValidation(id);
         Optional<Story> story = storyRepository.findById(id);
         if (story.isPresent()){
             storyRepository.deleteById(id);
-            return story.get();
         }
         throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
     }
+
+
 }

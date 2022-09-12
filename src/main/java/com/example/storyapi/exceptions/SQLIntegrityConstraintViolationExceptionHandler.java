@@ -1,4 +1,4 @@
-package com.example.storyapi.utils;
+package com.example.storyapi.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,3 +25,4 @@ public class SQLIntegrityConstraintViolationExceptionHandler extends ResponseEnt
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }
+

@@ -32,10 +32,7 @@ public class Story {
     @NotEmpty(message = "Blog description can't empty")
     private String description;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty(message = "Blog author can't empty")
-    private String author;
+    private int author;
 
     private LocalDateTime created_At = LocalDateTime.now();
 }

@@ -1,4 +1,5 @@
-package com.example.storyapi.utils;
+package com.example.storyapi.exceptions;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,3 +26,4 @@ public class ConstraintViolationExceptionHandler extends ResponseEntityException
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 }
+
