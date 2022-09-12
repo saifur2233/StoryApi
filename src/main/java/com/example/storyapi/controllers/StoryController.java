@@ -1,7 +1,6 @@
 package com.example.storyapi.controllers;
 
 import com.example.storyapi.models.Story;
-import com.example.storyapi.models.User;
 import com.example.storyapi.services.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class StoryController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Story> getStory(@PathVariable int id) {
+    public ResponseEntity<Story> getStory(@PathVariable Integer id) {
         Story story = storyService.getStory(id);
         return ResponseEntity.status(HttpStatus.OK).body(story);
     }
@@ -34,12 +33,12 @@ public class StoryController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Story> updateStory(@PathVariable int id, @RequestBody Story story){
+    public ResponseEntity<Story> updateStory(@PathVariable Integer id, @RequestBody Story story){
         Story updated = storyService.updateStory(id, story);
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Story> deleteStory(@PathVariable int id){
+    public ResponseEntity<Story> deleteStory(@PathVariable Integer id){
         storyService.deleteStory(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

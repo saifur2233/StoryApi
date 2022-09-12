@@ -1,4 +1,4 @@
-package com.example.storyapi.utils;
+package com.example.storyapi.exceptions;
 
 
 import org.springframework.http.HttpStatus;

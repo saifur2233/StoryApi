@@ -1,4 +1,5 @@
-package com.example.storyapi.utils;
+package com.example.storyapi.exceptions;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 
 @Component
-public class InvalidPropertiesFormatExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<InvalidPropertiesFormatException>{
+public class InvalidPropertiesFormatExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<InvalidPropertiesFormatException> {
 
     @ExceptionHandler(InvalidPropertiesFormatException.class)
     @Override

@@ -1,11 +1,13 @@
 package com.example.storyapi.Filter;
 
-import com.example.storyapi.models.User;
+import com.example.storyapi.models.Users;
 import com.example.storyapi.security.JWTUtility;
+import com.example.storyapi.services.UserDetailsServiceInfo;
 import com.example.storyapi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,7 +24,7 @@ public class JwtFilter extends OncePerRequestFilter{
     private JWTUtility jwtUtility;
 
     @Autowired
-    private UserService userService;
+    private UserDetailsServiceInfo userDetailsServiceInfo;
 
 
     @Override
@@ -36,11 +38,11 @@ public class JwtFilter extends OncePerRequestFilter{
             email = jwtUtility.getEmailFromToken(token);
         }
 
-        if(email!= null && SecurityContextHolder.getContext().getAuthentication() == null){
-            User user = userService.loadUserByEmail(email);
-            if (jwtUtility.validateToken(token, user)){
+        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            UserDetails userDetails = userDetailsServiceInfo.loadUserByUsername(email);
+            if (jwtUtility.validateToken(token, userDetails)){
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(user, null, null);
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
