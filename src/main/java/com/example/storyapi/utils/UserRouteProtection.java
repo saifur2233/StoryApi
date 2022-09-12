@@ -15,13 +15,13 @@ public class UserRouteProtection {
     private UserRepository userRepository;
 
     @Autowired
-    private GetUserEmail protectStoryApi;
+    private AuthenticationProvider authenticationProvider;
 
     public void checkUserValidation(Integer requestId){
-        String userEmail = protectStoryApi.secured();
+        String userEmail = authenticationProvider.secured();
         Optional<Users> users = userRepository.findByEmail(userEmail);
-
         if (users.isEmpty()) throw new EntityNotFoundException(Users.class, "id", String.valueOf(requestId));
-        if(!(requestId.equals(users.get().getId()))) throw new AccessDeniedException("id", String.valueOf(requestId));
+        Integer userId = users.get().getId();
+        if(!(requestId.equals(userId))) throw new AccessDeniedException("id", String.valueOf(requestId));
     }
 }

@@ -15,10 +15,10 @@ public class CreateStoryRouteProtection {
     private UserRepository userRepository;
 
     @Autowired
-    private GetUserEmail protectStoryApi;
+    private AuthenticationProvider authenticationProvider;
 
     public Integer checkUserValidation(){
-        String userEmail = protectStoryApi.secured();
+        String userEmail = authenticationProvider.secured();
         Optional<Users> users = userRepository.findByEmail(userEmail);
 
         if(users.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(users.get().getId()));

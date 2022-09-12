@@ -10,14 +10,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 
 @Component
-public class InvalidPropertiesFormatExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<InvalidPropertiesFormatException> {
+public class InvalidPasswordExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<InvalidPasswordException> {
 
-    @ExceptionHandler(InvalidPropertiesFormatException.class)
+    @ExceptionHandler(InvalidPasswordException.class)
     @Override
-    public ResponseEntity<Object> handleException(InvalidPropertiesFormatException ex) {
+    public ResponseEntity<Object> handleException(InvalidPasswordException ex) {
         ApiError apiError = new ApiError();
         apiError.message.add(ex.getMessage());
-        apiError.setStatus(HttpStatus.NOT_FOUND);
+        apiError.setStatus(HttpStatus.BAD_REQUEST);
         apiError.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
