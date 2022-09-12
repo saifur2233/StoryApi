@@ -2,6 +2,7 @@ package com.example.storyapi.security;
 
 import com.example.storyapi.Filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,14 +19,22 @@ public class SecurityConfiguration {
 
     @Autowired
     private JwtFilter jwtFilter;
-
-
+    @Value("${apiPrefix}")
+    private String urlPrefix;
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers( "/api/v1/users/signup","/api/v1/users/signin","/api/v1/users/stories","/api/v1/users/stories/{id}", "/api/v1/users", "/api/v1/users/{id}")
+                .antMatchers( urlPrefix+"/signup",urlPrefix+"/signin")
+                .permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers( urlPrefix+"/stories",urlPrefix+"/stories/{id}")
+                .permitAll()
+                .and()
+                .authorizeRequests()
+                .antMatchers( urlPrefix, urlPrefix+"/{id}")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
