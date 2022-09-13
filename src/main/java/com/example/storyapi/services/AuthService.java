@@ -1,5 +1,6 @@
 package com.example.storyapi.services;
 
+import com.example.storyapi.exceptions.DuplicateEmailException;
 import com.example.storyapi.exceptions.EntityNotFoundException;
 import com.example.storyapi.exceptions.InvalidPasswordException;
 import com.example.storyapi.models.Users;
@@ -18,6 +19,8 @@ public class AuthService {
     private UserRepository userRepository;
 
     public Users signUp(Users users){
+        Optional<Users> existEmail = userRepository.findByEmail(users.getEmail());
+        if (existEmail.isPresent()) throw new DuplicateEmailException(Users.class, " Email ", existEmail.get().getEmail());
         if(PasswordFormatValidation.isValid(users.getPassword())){
             users.setPassword(passwordEncoder.encode(users.getPassword()));
             return userRepository.save(users);
