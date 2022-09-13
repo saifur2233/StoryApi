@@ -1,9 +1,9 @@
 package com.example.storyapi.Filter;
 
-import com.example.storyapi.models.Users;
+import com.example.storyapi.exceptions.AccessDeniedException;
+import com.example.storyapi.exceptions.JWTException;
 import com.example.storyapi.security.JWTUtility;
 import com.example.storyapi.services.UserDetailsServiceInfo;
-import com.example.storyapi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +35,12 @@ public class JwtFilter extends OncePerRequestFilter{
 
         if(authorization != null && authorization.startsWith("Bearer")){
             token = authorization.substring(7);
-            email = jwtUtility.getEmailFromToken(token);
+            try{
+                email = jwtUtility.getEmailFromToken(token);
+            }
+            catch (Exception e){
+                throw new JWTException(e.getMessage());
+            }
         }
 
         if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
