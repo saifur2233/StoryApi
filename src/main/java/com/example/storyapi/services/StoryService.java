@@ -9,7 +9,11 @@ import com.example.storyapi.repositories.StoryRepository;
 import com.example.storyapi.utils.CreateStoryRouteProtection;
 import com.example.storyapi.utils.StoryRouteProtection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -27,8 +31,11 @@ public class StoryService {
     @Autowired
     private StoryConverter storyConverter;
 
-    public Iterable<StoryDTO> getAllStories(){
-        return storyConverter.iterableStoryDto(storyRepository.findAll());
+    public Iterable<StoryDTO> getAllStories(Integer pageNumber, Integer pageSize){
+        Pageable pageableObj = PageRequest.of(pageNumber, pageSize);
+        Page<Story> storyPage = storyRepository.findAll(pageableObj);
+        Iterable<Story> allStory = storyPage.getContent();
+        return storyConverter.iterableStoryDto(allStory);
     }
 
     public StoryDTO getStory(Integer id){
