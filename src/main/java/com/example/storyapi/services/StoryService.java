@@ -31,11 +31,8 @@ public class StoryService {
     @Autowired
     private StoryConverter storyConverter;
 
-    public Iterable<StoryDTO> getAllStories(Integer pageNumber, Integer pageSize){
-        Pageable pageableObj = PageRequest.of(pageNumber, pageSize);
-        Page<Story> storyPage = storyRepository.findAll(pageableObj);
-        Iterable<Story> allStory = storyPage.getContent();
-        return storyConverter.iterableStoryDto(allStory);
+    public Iterable<StoryDTO> getAllStories(){
+        return storyConverter.iterableStoryDto(storyRepository.findAll());
     }
 
     public StoryDTO getStory(Integer id){

@@ -16,11 +16,8 @@ public class StoryController {
     private StoryService storyService;
 
     @GetMapping
-    public ResponseEntity<Iterable<StoryDTO>> getAllStories(
-            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize
-    ){
-        Iterable<StoryDTO> stories = storyService.getAllStories(pageNumber, pageSize);
+    public ResponseEntity<Iterable<StoryDTO>> getAllStories(){
+        Iterable<StoryDTO> stories = storyService.getAllStories();
         return ResponseEntity.status(HttpStatus.OK).body(stories);
     }
 
