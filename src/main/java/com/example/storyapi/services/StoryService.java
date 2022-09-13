@@ -1,7 +1,10 @@
 package com.example.storyapi.services;
 
+import com.example.storyapi.converter.StoryConverter;
+import com.example.storyapi.dto.StoryDTO;
 import com.example.storyapi.exceptions.EntityNotFoundException;
 import com.example.storyapi.models.Story;
+import com.example.storyapi.models.Users;
 import com.example.storyapi.repositories.StoryRepository;
 import com.example.storyapi.utils.CreateStoryRouteProtection;
 import com.example.storyapi.utils.StoryRouteProtection;
@@ -21,30 +24,33 @@ public class StoryService {
     @Autowired
     private CreateStoryRouteProtection createStoryRouteProtection;
 
-    public Iterable<Story> getAllStories(){
-        return storyRepository.findAll();
+    @Autowired
+    private StoryConverter storyConverter;
+
+    public Iterable<StoryDTO> getAllStories(){
+        return storyConverter.iterableStoryDto(storyRepository.findAll());
     }
 
-    public Story getStory(Integer id){
+    public StoryDTO getStory(Integer id){
         Optional<Story> story = storyRepository.findById(id);
         if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
-        return story.get();
+        return storyConverter.entityToDto(story.get());
     }
 
-    public Story createStory(Story story){
-        int authorId = createStoryRouteProtection.checkUserValidation();
-        story.setAuthor(authorId);
-        return storyRepository.save(story);
+    public StoryDTO createStory(Story story){
+        Users storyauthor = createStoryRouteProtection.checkUserValidation();
+        story.setAuthor(storyauthor);
+        return storyConverter.entityToDto(storyRepository.save(story));
     }
 
-    public Story updateStory(Integer id, Story story){
+    public StoryDTO updateStory(Integer id, Story story){
         Optional<Story> storyObj =  storyRepository.findById(id);
         if (storyObj.isEmpty()){
             throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
         }
-        routeProtection.checkUserValidation(storyObj.get().getAuthor());
+        routeProtection.checkUserValidation(storyObj.get().getAuthor().getId());
         setUserProperties(storyObj.get(), story);
-        return storyRepository.save(storyObj.get());
+        return storyConverter.entityToDto(storyRepository.save(storyObj.get()));
     }
 
     protected void setUserProperties(Story currentStory, Story story) {
@@ -54,7 +60,7 @@ public class StoryService {
     public void deleteStory(Integer id){
         Optional<Story> story = storyRepository.findById(id);
         if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
-        routeProtection.checkUserValidation(story.get().getAuthor());
+        routeProtection.checkUserValidation(story.get().getAuthor().getId());
         storyRepository.deleteById(id);
     }
 

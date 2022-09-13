@@ -17,11 +17,11 @@ public class CreateStoryRouteProtection {
     @Autowired
     private AuthenticationProvider authenticationProvider;
 
-    public Integer checkUserValidation(){
+    public Users checkUserValidation(){
         String userEmail = authenticationProvider.secured();
         Optional<Users> users = userRepository.findByEmail(userEmail);
 
-        if(users.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(users.get().getId()));
-        return users.get().getId();
+        if(users.isEmpty()) throw new EntityNotFoundException(Story.class, "Email", userEmail);
+        return users.get();
     }
 }

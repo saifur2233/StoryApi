@@ -1,5 +1,6 @@
 package com.example.storyapi.controllers;
 
+import com.example.storyapi.dto.StoryDTO;
 import com.example.storyapi.models.Story;
 import com.example.storyapi.services.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,26 +16,26 @@ public class StoryController {
     private StoryService storyService;
 
     @GetMapping
-    public ResponseEntity<Iterable<Story>> getAllStories(){
-        Iterable<Story> stories = storyService.getAllStories();
+    public ResponseEntity<Iterable<StoryDTO>> getAllStories(){
+        Iterable<StoryDTO> stories = storyService.getAllStories();
         return ResponseEntity.status(HttpStatus.OK).body(stories);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Story> getStory(@PathVariable Integer id) {
-        Story story = storyService.getStory(id);
+    public ResponseEntity<StoryDTO> getStory(@PathVariable Integer id) {
+        StoryDTO story = storyService.getStory(id);
         return ResponseEntity.status(HttpStatus.OK).body(story);
     }
 
     @PostMapping
-    public ResponseEntity<Story> createStory(@RequestBody Story story){
-        Story newStory = storyService.createStory(story);
+    public ResponseEntity<StoryDTO> createStory(@RequestBody Story story){
+        StoryDTO newStory = storyService.createStory(story);
         return ResponseEntity.status(HttpStatus.CREATED).body(newStory);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Story> updateStory(@PathVariable Integer id, @RequestBody Story story){
-        Story updated = storyService.updateStory(id, story);
+    public ResponseEntity<StoryDTO> updateStory(@PathVariable Integer id, @RequestBody Story story){
+        StoryDTO updated = storyService.updateStory(id, story);
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
     @DeleteMapping(value = "/{id}")
