@@ -24,9 +24,9 @@ public class Users {
     private String name;
 
 
-    @Column(name="email", unique=true)
+
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE, message = "User email can't empty")
-    private String  email;
+    private String email;
 
     @NotNull
     @NotBlank
