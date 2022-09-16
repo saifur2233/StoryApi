@@ -40,9 +40,12 @@ public class Users {
 
     private LocalDateTime created_At = LocalDateTime.now();
 
-    public Users(String email, String password){
+    public Users(int id,String name,String email, String password, String phoneNumber){
+        this.id = id;
+        this.name = name;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
     }
 
 }
