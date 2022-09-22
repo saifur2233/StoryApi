@@ -48,7 +48,7 @@ public class StoryControllerTest {
 
     @Test
     @DisplayName("GET Find one story - Found")
-    void testGetUserSuccess() throws Exception{
+    void testGetStorySuccess() throws Exception{
         StoryDTO mockstoryDto = new StoryDTO(1,"hello 01", "hjashalallkdaldlnadd", "saifur@gmail.com");
         when(storyService.getStory(mockstoryDto.getId())).thenReturn(mockstoryDto);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stories/search/{id}",1))
@@ -63,7 +63,7 @@ public class StoryControllerTest {
 
     @Test
     @DisplayName("GET Find one story - Not Found")
-    void testGetUserNotFound() throws Exception{
+    void testGetStoryNotFound() throws Exception{
         StoryDTO mockstoryDto = new StoryDTO(1,"hello 01", "hjashalallkdaldlnadd", "saifur@gmail.com");
         when(storyService.getStory(3)).thenReturn(mockstoryDto).thenThrow(new EntityNotFoundException("Story Not Found"));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/stories/search/{id}",1))
@@ -94,7 +94,7 @@ public class StoryControllerTest {
 
     @Test
     @DisplayName("GET All Blog - Found")
-    void testFindAllUser() throws Exception{
+    void testFindAllStory() throws Exception{
         StoryDTO mockstoryDto1 = new StoryDTO(1,"hello 01", "hjashalallkdaldlnadd", "saifur@gmail.com");
         StoryDTO mockstoryDto2 = new StoryDTO(2,"hello 02", "hjashalallkdaldlnadd", "saifur@gmail.com");
         when(storyService.getAllStories(0,6))

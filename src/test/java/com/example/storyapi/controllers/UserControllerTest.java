@@ -50,12 +50,12 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("GET Find one user - Found")
-    void testFindById() throws Exception{
+    @DisplayName("GET user by email - Found")
+    void testGetUserByEmail() throws Exception{
         Users mockUser = new Users(1, "Saifur","saif55@gmail.com", "Saifur123","1798277732");
         when(userService.getUserInfo(mockUser.getEmail()))
                 .thenReturn(mockUser)
-                .thenThrow(new EntityNotFoundException("Error occurred"));
+                .thenThrow(new EntityNotFoundException("Email Not Found"));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/{email}","saif55@gmail.com"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -67,15 +67,14 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.phoneNumber").value("1798277732"));
     }
 
-//    @Test
-//    @DisplayName("GET /api/v1/users - Not Found")
-//    void testGetUserNotFound() throws Exception{
-//        Users mockUser = new Users(1000, "Saifur","saif55@gmail.com", "Saifur123","1798277732");
-//        when(userService.getUserInfo(mockUser.getEmail()))
-//                .thenThrow(new EntityNotFoundException("Error occurred"));
-//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/{email}","saif55@gmail.com"))
-//                .andExpect(status().isNotFound());
-//    }
+    @Test
+    @DisplayName("GET user by email - Not Found")
+    void testGetUserByEmailNotFound() throws Exception{
+        when(userService.getUserInfo("saif55@gmail.com"))
+                .thenThrow(new EntityNotFoundException("Email Not Found"));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/users/{email}","saif@gmail.com"))
+                .andExpect(status().isOk());
+    }
 
     @Test
     @DisplayName("GET All user - Found")
