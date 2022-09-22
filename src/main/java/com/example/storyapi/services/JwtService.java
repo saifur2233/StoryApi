@@ -1,7 +1,5 @@
 package com.example.storyapi.services;
 
-import com.example.storyapi.models.JwtResponse;
-import com.example.storyapi.models.Users;
 import com.example.storyapi.security.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,9 +14,9 @@ public class JwtService {
     @Autowired
     private UserDetailsServiceInfo userDetailsServiceInfo;
 
-    public JwtResponse authenticate(String email) {
+    public String authenticate(String email) {
         final UserDetails userDetails = userDetailsServiceInfo.loadUserByUsername(email);
         final String token  = jwtUtility.generateToken(userDetails);
-        return new JwtResponse(token);
+        return token;
     }
 }

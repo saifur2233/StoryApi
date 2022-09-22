@@ -17,7 +17,7 @@ public class StoryConverter {
         dto.setId(story.getId());
         dto.setTitle(story.getTitle());
         dto.setDescription(story.getDescription());
-        dto.setAuthorName(story.getAuthor().getName());
+        dto.setAuthorEmail(story.getAuthor().getEmail());
         dto.setCreatedAt(story.getCreated_At());
         return dto;
     }
@@ -25,6 +25,10 @@ public class StoryConverter {
     public Iterable<StoryDTO> iterableStoryDto(Iterable<Story> stories){
         return StreamSupport.stream(stories.spliterator(), false).toList().stream()
                 .map(this::entityToDto).collect(Collectors.toList());
+    }
+
+    public List<StoryDTO> listStoryDto(List<Story> stories){
+        return stories.stream().map(this::entityToDto).collect(Collectors.toList());
     }
 
 }
