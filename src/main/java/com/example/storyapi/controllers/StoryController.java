@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "${apiPrefix}/stories")
 public class StoryController {
@@ -16,18 +18,24 @@ public class StoryController {
     private StoryService storyService;
 
     @GetMapping
-    public ResponseEntity<Iterable<StoryDTO>> getAllStories(
+    public ResponseEntity<List<StoryDTO>> getAllStories(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize
+            @RequestParam(value = "pageSize", defaultValue = "6", required = false) Integer pageSize
     ){
-        Iterable<StoryDTO> stories = storyService.getAllStories(pageNumber, pageSize);
+        List<StoryDTO> stories = storyService.getAllStories(pageNumber, pageSize);
         return ResponseEntity.status(HttpStatus.OK).body(stories);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/search/{id}")
     public ResponseEntity<StoryDTO> getStory(@PathVariable Integer id) {
         StoryDTO story = storyService.getStory(id);
         return ResponseEntity.status(HttpStatus.OK).body(story);
+    }
+
+    @GetMapping(value = "/{email}")
+    public ResponseEntity<List<StoryDTO>> getUserEmailAllStory(@PathVariable String email) {
+        List<StoryDTO> stories = storyService.getUserEmailAllStory(email);
+        return ResponseEntity.status(HttpStatus.OK).body(stories);
     }
 
     @PostMapping

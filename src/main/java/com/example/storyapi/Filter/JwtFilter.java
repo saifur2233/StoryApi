@@ -1,6 +1,5 @@
 package com.example.storyapi.Filter;
 
-import com.example.storyapi.exceptions.AccessDeniedException;
 import com.example.storyapi.exceptions.JWTException;
 import com.example.storyapi.security.JWTUtility;
 import com.example.storyapi.services.UserDetailsServiceInfo;
@@ -14,9 +13,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter{
@@ -26,15 +28,34 @@ public class JwtFilter extends OncePerRequestFilter{
     @Autowired
     private UserDetailsServiceInfo userDetailsServiceInfo;
 
-
+    private static final String COOKIE_NAME = "lexus";
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorization = request.getHeader("Authorization");
+
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
+        response.setHeader("Access-Control-Max-Age","3600");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept, X-Requested-With, remember-me");
+
+//        Optional<Cookie> cookieAuth = Stream.of(Optional.ofNullable(request.getCookies())
+//                .orElse(new Cookie[0]))
+//                .filter(cookie -> COOKIE_NAME.equals(cookie.getName()))
+//                .findFirst();
+//        cookieAuth.isPresent(cookie -> SecurityContextHolder.getContext().setAuthentication(
+//                new PreAuthenticatedAuthenticationToken(cookie.getValue(), null)
+//        ));
+
+        //String authorization = request.getHeader("Authorization");
         String token = null;
         String email = null;
 
-        if(authorization != null && authorization.startsWith("Bearer")){
-            token = authorization.substring(7);
+        Optional<Cookie> cookieAuth = Stream.of(Optional.ofNullable(request.getCookies())
+                .orElse(new Cookie[0]))
+                .filter(cookie -> COOKIE_NAME.equals(cookie.getName()))
+                .findFirst();
+        if(cookieAuth.isPresent()){
+            token = cookieAuth.get().getValue();
             try{
                 email = jwtUtility.getEmailFromToken(token);
             }

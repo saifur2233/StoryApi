@@ -13,8 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,17 +31,23 @@ public class StoryService {
     @Autowired
     private StoryConverter storyConverter;
 
-    public Iterable<StoryDTO> getAllStories(Integer pageNumber, Integer pageSize){
+    public List<StoryDTO> getAllStories(Integer pageNumber, Integer pageSize){
         Pageable pageableObj = PageRequest.of(pageNumber, pageSize);
         Page<Story> storyPage = storyRepository.findAll(pageableObj);
-        Iterable<Story> allStory = storyPage.getContent();
-        return storyConverter.iterableStoryDto(allStory);
+        List<Story> allStory = storyPage.getContent();
+        return storyConverter.listStoryDto(allStory);
     }
 
     public StoryDTO getStory(Integer id){
         Optional<Story> story = storyRepository.findById(id);
         if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
         return storyConverter.entityToDto(story.get());
+    }
+
+    public List<StoryDTO> getUserEmailAllStory(String email){
+        List<Story> stories = storyRepository.findAllByauthorEmail(email);
+        if (stories.size() == '0') throw new EntityNotFoundException(Story.class, "Email", String.valueOf(email));
+        return storyConverter.listStoryDto(stories);
     }
 
     public StoryDTO createStory(Story story){

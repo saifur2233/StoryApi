@@ -26,9 +26,15 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Users getUser(Integer id){
-        Optional<Users> user = userRepository.findById(id);
-        if (user.isEmpty()) throw new EntityNotFoundException(Users.class, "id", String.valueOf(id));
+//    public Users getUser(Integer id){
+//        Optional<Users> user = userRepository.findById(id);
+//        if (user.isEmpty()) throw new EntityNotFoundException(Users.class, "id", String.valueOf(id));
+//        return user.get();
+//    }
+
+    public Users getUserInfo(String email){
+        Optional<Users> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) throw new EntityNotFoundException(Users.class, "Email", String.valueOf(email));
         return user.get();
     }
 
@@ -50,7 +56,7 @@ public class UserService {
 
     protected void setUserProperties(Users currentUsers, Users users) {
         currentUsers.setName(users.getName());
-        currentUsers.setEmail(users.getEmail());
+        //currentUsers.setEmail(currentUsers.getEmail());
         currentUsers.setPassword(passwordEncoder.encode(users.getPassword()));
         currentUsers.setPhoneNumber(users.getPhoneNumber());
     }

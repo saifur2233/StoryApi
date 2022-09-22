@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "${apiPrefix}")
+@RequestMapping(path = "${apiPrefix}"+"/users")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -19,9 +19,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Users> getUser(@PathVariable Integer id) {
-        Users users = userService.getUser(id);
+//    @GetMapping(value = "/{id}")
+//    public ResponseEntity<Users> getUser(@PathVariable Integer id) {
+//        Users users = userService.getUser(id);
+//        return ResponseEntity.status(HttpStatus.OK).body(users);
+//    }
+
+    @GetMapping(value = "/{email}")
+    public ResponseEntity<Users> getUserInfo(@PathVariable String email) {
+        Users users = userService.getUserInfo(email);
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
