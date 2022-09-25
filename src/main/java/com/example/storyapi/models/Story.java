@@ -31,7 +31,20 @@ public class Story {
 
 
     @ManyToOne
+    @JoinColumn(name = "author_id")
     private Users author;
 
     private LocalDateTime created_At = LocalDateTime.now();
+
+    public Story(int id, String title, String description){
+        this.id = id;
+        this.title = title;
+        this.description = description;
+
+    }
+    public Story(String title, String description){
+        this.title = title;
+        this.description = description;
+
+    }
 }

@@ -46,7 +46,7 @@ public class StoryService {
 
     public List<StoryDTO> getUserEmailAllStory(String email){
         List<Story> stories = storyRepository.findAllByauthorEmail(email);
-        if (stories.size() == '0') throw new EntityNotFoundException(Story.class, "Email", String.valueOf(email));
+        if (stories.size() == 0) throw new EntityNotFoundException(Story.class, "Email", String.valueOf(email));
         return storyConverter.listStoryDto(stories);
     }
 

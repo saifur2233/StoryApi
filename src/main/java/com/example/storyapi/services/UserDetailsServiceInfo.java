@@ -1,5 +1,6 @@
 package com.example.storyapi.services;
 
+import com.example.storyapi.exceptions.EntityNotFoundException;
 import com.example.storyapi.models.Users;
 import com.example.storyapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class UserDetailsServiceInfo implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         Optional<Users> newUser = userRepository.findByEmail(email);
+        if(newUser.isEmpty()) throw new EntityNotFoundException(UserDetailsServiceInfo.class, " Email ", email);
         return new User(newUser.get().getEmail(),newUser.get().getPassword(),new ArrayList<>());
     }
 }
