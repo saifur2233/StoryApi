@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,6 +42,12 @@ public class Users {
 
     private LocalDateTime created_At = LocalDateTime.now();
 
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Story> stories;
+
     public Users(int id,String name,String email, String password, String phoneNumber){
         this.id = id;
         this.name = name;
@@ -54,5 +62,7 @@ public class Users {
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
+
+
 
 }

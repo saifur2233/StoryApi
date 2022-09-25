@@ -1,6 +1,7 @@
 package com.example.storyapi.controllers;
 
 import com.example.storyapi.Filter.JwtFilter;
+import com.example.storyapi.dto.UserDTO;
 import com.example.storyapi.models.Users;
 import com.example.storyapi.services.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,7 +53,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("GET user by email - Found")
     void testGetUserByEmail() throws Exception{
-        Users mockUser = new Users(1, "Saifur","saif55@gmail.com", "Saifur123","1798277732");
+        UserDTO mockUser = new UserDTO(1, "Saifur","saif55@gmail.com", "1798277732");
         when(userService.getUserInfo(mockUser.getEmail()))
                 .thenReturn(mockUser)
                 .thenThrow(new EntityNotFoundException("Email Not Found"));
@@ -63,7 +64,6 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Saifur"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("saif55@gmail.com"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.password").value("Saifur123"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.phoneNumber").value("1798277732"));
     }
 
@@ -79,8 +79,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("GET All user - Found")
     void testFindAllUser() throws Exception{
-        Users mockUser1 = new Users(1, "Saifur","saif55@gmail.com", "Saifur123","1798277732");
-        Users mockUser2 = new Users(2, "Saif","saif55@gmail.com", "Saifur123","1798277732");
+        UserDTO mockUser1 = new UserDTO(1, "Saifur","saif@gmail.com", "1798277732");
+        UserDTO mockUser2 = new UserDTO(1, "Saifur","saif@gmail.com", "1798277732");
         when(userService.getAllUsers())
                 .thenReturn(Arrays.asList(mockUser1, mockUser2));
 
@@ -92,8 +92,8 @@ public class UserControllerTest {
     @Test
     @DisplayName("PUT /api/v1/users/1 - User Update Success")
     void testUserUpdate() throws Exception {
-        Users putUser = new Users("Saifur", "saif@gmail.com", "Saifur123", "1798277732");
-        Users mockUser = new Users(1, "Saifur", "saif@gmail.com", "Saifur123", "1798277732");
+        UserDTO putUser = new UserDTO(1, "Saifur","saif@gmail.com", "1798277732");
+        UserDTO mockUser = new UserDTO(1, "Saifur","saif@gmail.com", "1798277732");
 
         doReturn(mockUser).when(userService).updateUser(eq(mockUser.getId()), any(Users.class));
 
@@ -108,7 +108,6 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Saifur"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("saif@gmail.com"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.password").value("Saifur123"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.phoneNumber").value("1798277732"));
     }
 
@@ -128,7 +127,7 @@ public class UserControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    private String asJsonString(final Users putUser) {
+    private String asJsonString(final UserDTO putUser) {
         try{
             return objectMapper.writeValueAsString(putUser);
         }catch (Exception e){

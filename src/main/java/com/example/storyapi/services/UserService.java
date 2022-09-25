@@ -1,14 +1,18 @@
 package com.example.storyapi.services;
 
+import com.example.storyapi.converter.UserConverter;
+import com.example.storyapi.dto.UserDTO;
 import com.example.storyapi.exceptions.DuplicateEmailException;
 import com.example.storyapi.exceptions.EntityNotFoundException;
 import com.example.storyapi.models.Users;
 import com.example.storyapi.repositories.UserRepository;
 import com.example.storyapi.utils.UserRouteProtection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Streamable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,8 +26,15 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Iterable<Users> getAllUsers(){
-        return userRepository.findAll();
+    @Autowired
+    private UserConverter userConverter;
+
+    public List<UserDTO> getAllUsers(){
+        Iterable<Users> allUser = userRepository.findAll();
+        //List<Users> list = new ArrayList<Users>();
+        //allUser.forEach(list::add);
+        List<Users> list = Streamable.of(allUser).toList();
+        return userConverter.listUserDto(list);
     }
 
 //    public Users getUser(Integer id){
@@ -32,13 +43,13 @@ public class UserService {
 //        return user.get();
 //    }
 
-    public Users getUserInfo(String email){
+    public UserDTO getUserInfo(String email){
         Optional<Users> user = userRepository.findByEmail(email);
         if (user.isEmpty()) throw new EntityNotFoundException(Users.class, "Email", String.valueOf(email));
-        return user.get();
+        return userConverter.entityToDto(user.get());
     }
 
-    public Users updateUser(Integer id, Users users){
+    public UserDTO updateUser(Integer id, Users users){
         userRouteProtection.checkUserValidation(id);
         Optional<Users> userObj =  userRepository.findById(id);
         if (userObj.isEmpty()){
@@ -50,7 +61,7 @@ public class UserService {
         }
         setUserProperties(userObj.get(), users);
         userRepository.save(userObj.get());
-        return userObj.get();
+        return userConverter.entityToDto(userObj.get());
 
     }
 
