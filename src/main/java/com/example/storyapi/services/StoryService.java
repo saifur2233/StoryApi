@@ -8,6 +8,7 @@ import com.example.storyapi.models.Users;
 import com.example.storyapi.repositories.StoryRepository;
 import com.example.storyapi.utils.CreateStoryRouteProtection;
 import com.example.storyapi.utils.StoryRouteProtection;
+import com.example.storyapi.utils.StoryUpdateSetProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,9 @@ public class StoryService {
 
     @Autowired
     private StoryConverter storyConverter;
+
+    @Autowired
+    private StoryUpdateSetProperties storyUpdateSetProperties;
 
     public List<StoryDTO> getAllStories(Integer pageNumber, Integer pageSize){
         Pageable pageableObj = PageRequest.of(pageNumber, pageSize);
@@ -62,14 +66,10 @@ public class StoryService {
             throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));
         }
         routeProtection.checkUserValidation(storyObj.get().getAuthor().getId());
-        setUserProperties(storyObj.get(), story);
+        storyUpdateSetProperties.setUserProperties(storyObj.get(), story);
         return storyConverter.entityToDto(storyRepository.save(storyObj.get()));
     }
 
-    protected void setUserProperties(Story currentStory, Story story) {
-        currentStory.setTitle(story.getTitle());
-        currentStory.setDescription(story.getDescription());
-    }
     public void deleteStory(Integer id){
         Optional<Story> story = storyRepository.findById(id);
         if (story.isEmpty()) throw new EntityNotFoundException(Story.class, "id", String.valueOf(id));

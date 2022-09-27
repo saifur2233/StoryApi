@@ -26,4 +26,9 @@ public class StoryDTO {
         this.description = description;
         this.authorEmail = authorEmail;
     }
+    public StoryDTO(int id, String title, String description){
+        this.id =id;
+        this.title = title;
+        this.description = description;
+    }
 }

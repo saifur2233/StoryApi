@@ -7,6 +7,7 @@ import com.example.storyapi.exceptions.EntityNotFoundException;
 import com.example.storyapi.models.Users;
 import com.example.storyapi.repositories.UserRepository;
 import com.example.storyapi.utils.UserRouteProtection;
+import com.example.storyapi.utils.UserUpdateSetProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,10 +30,11 @@ public class UserService {
     @Autowired
     private UserConverter userConverter;
 
+    @Autowired
+    private UserUpdateSetProperties userUpdateSetProperties;
+
     public List<UserDTO> getAllUsers(){
         Iterable<Users> allUser = userRepository.findAll();
-        //List<Users> list = new ArrayList<Users>();
-        //allUser.forEach(list::add);
         List<Users> list = Streamable.of(allUser).toList();
         return userConverter.listUserDto(list);
     }
@@ -59,17 +61,10 @@ public class UserService {
         if (existEmail.isPresent() && !(id.equals(existEmail.get().getId()))){
             throw new DuplicateEmailException(Users.class, " Email ", existEmail.get().getEmail());
         }
-        setUserProperties(userObj.get(), users);
+
+        userUpdateSetProperties.setUserProperties(userObj.get(), users);
         userRepository.save(userObj.get());
         return userConverter.entityToDto(userObj.get());
-
-    }
-
-    protected void setUserProperties(Users currentUsers, Users users) {
-        currentUsers.setName(users.getName());
-        //currentUsers.setEmail(currentUsers.getEmail());
-        currentUsers.setPassword(passwordEncoder.encode(users.getPassword()));
-        currentUsers.setPhoneNumber(users.getPhoneNumber());
     }
 
     public void deleteUser(Integer id){

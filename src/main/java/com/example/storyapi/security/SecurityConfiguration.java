@@ -37,7 +37,7 @@ public class SecurityConfiguration {
         http.cors().configurationSource(request -> corsConfiguration).and().csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers( urlPrefix+"/signup",urlPrefix+"/signin")
+                .antMatchers( urlPrefix+"/signup",urlPrefix+"/signin",urlPrefix+"/signout")
                 .permitAll()
                 .and()
                 .authorizeRequests()
@@ -48,6 +48,9 @@ public class SecurityConfiguration {
                 .antMatchers( urlPrefix+"/users", urlPrefix+"/users/{id}", urlPrefix+"/verifyuser")
                 .permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .logout()
+                .deleteCookies("lexus")
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

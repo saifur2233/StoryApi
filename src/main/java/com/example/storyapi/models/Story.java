@@ -8,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -19,11 +21,13 @@ public class Story {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Size(max = 500)
     @NotNull
     @NotBlank
     @NotEmpty(message = "Blog title can't empty")
     private String title;
 
+    @Size(max = 4000)
     @NotNull
     @NotBlank
     @NotEmpty(message = "Blog description can't empty")
@@ -40,11 +44,30 @@ public class Story {
         this.id = id;
         this.title = title;
         this.description = description;
-
+    }
+    public Story(int id, String title, String description, Users author){
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.author =author;
     }
     public Story(String title, String description){
         this.title = title;
         this.description = description;
 
+    }
+
+    @Override
+    public int hashCode() {
+        return id+author.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        Story other = (Story) obj;
+        return Objects.equals(getId(), other.id);
     }
 }

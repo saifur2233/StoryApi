@@ -38,15 +38,6 @@ public class JwtFilter extends OncePerRequestFilter{
         response.setHeader("Access-Control-Max-Age","3600");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type,Accept, X-Requested-With, remember-me");
 
-//        Optional<Cookie> cookieAuth = Stream.of(Optional.ofNullable(request.getCookies())
-//                .orElse(new Cookie[0]))
-//                .filter(cookie -> COOKIE_NAME.equals(cookie.getName()))
-//                .findFirst();
-//        cookieAuth.isPresent(cookie -> SecurityContextHolder.getContext().setAuthentication(
-//                new PreAuthenticatedAuthenticationToken(cookie.getValue(), null)
-//        ));
-
-        //String authorization = request.getHeader("Authorization");
         String token = null;
         String email = null;
 
