@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 
 @Component
@@ -20,11 +19,6 @@ public class StoryConverter {
         dto.setAuthorEmail(story.getAuthor().getEmail());
         dto.setCreatedAt(story.getCreated_At());
         return dto;
-    }
-
-    public Iterable<StoryDTO> iterableStoryDto(Iterable<Story> stories){
-        return StreamSupport.stream(stories.spliterator(), false).toList().stream()
-                .map(this::entityToDto).collect(Collectors.toList());
     }
 
     public List<StoryDTO> listStoryDto(List<Story> stories){

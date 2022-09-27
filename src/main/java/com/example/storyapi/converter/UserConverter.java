@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Component
 public class UserConverter {
@@ -22,10 +21,6 @@ public class UserConverter {
     }
     public List<UserDTO> listUserDto(List<Users> users){
         return users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-    }
-    public Iterable<UserDTO> iterableStoryDto(Iterable<Users> users){
-        return StreamSupport.stream(users.spliterator(), false).toList().stream()
-                .map(this::entityToDto).collect(Collectors.toList());
     }
 
 }

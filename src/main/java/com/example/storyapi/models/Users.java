@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -62,7 +63,38 @@ public class Users {
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
+    public Users(String name,String password, String phoneNumber){
+        this.name = name;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+    }
 
+    public Users(String email, String password){
+        this.email = email;
+        this.password = password;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id+email.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        Users other = (Users) obj;
+        return Objects.equals(getId(), other.id) && Objects.equals(getEmail(), other.email);
+    }
 
 
 }
