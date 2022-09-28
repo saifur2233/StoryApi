@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -17,8 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -71,7 +71,11 @@ void testSignInUserNotFound(){
         doReturn(encodePassword).when(passwordEncoder).encode(postUser.getPassword());
         doReturn(mockUser).when(userRepository).save(postUser);
 
+        ArgumentCaptor<Users> captor = ArgumentCaptor.forClass(Users.class);
+
         Users user = authService.signUp(postUser);
+        verify(userRepository).save(captor.capture());
+        //Users captureUser = captor.getValue();
         Assertions.assertEquals(mockUser,user);
     }
 
