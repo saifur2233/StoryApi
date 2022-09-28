@@ -1,5 +1,6 @@
 package com.example.storyapi.converter;
 
+import com.example.storyapi.dto.StoryDTO;
 import com.example.storyapi.models.Story;
 import com.example.storyapi.models.Users;
 import org.junit.jupiter.api.Test;
@@ -28,4 +29,10 @@ public class StoryConverterTest {
         Story mockstory2 = new Story(2,"updated title test  fdfd  sdsdsd erwerer 01", "updated jhausjjhjka dfdffg dfdfdfdf cffgf fddfdfgdf dfdfdfdf rtrrttr", new Users("saif@gmail.com","Saifur123"));
         storyConverter.listStoryDto(Arrays.asList(mockstory1,mockstory2));
     }
+
+    @Test
+    void testStoryDto(){
+        StoryDTO storyDTO = new StoryDTO(1, "hello 01", "jksjsdjdmsdffmsd");
+    }
+
 }
