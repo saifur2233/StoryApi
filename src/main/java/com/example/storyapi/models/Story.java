@@ -54,14 +54,9 @@ public class Story {
     public Story(String title, String description){
         this.title = title;
         this.description = description;
-
     }
-
     @Override
-    public int hashCode() {
-        return id+author.hashCode();
-    }
-
+    public int hashCode() {return id+author.hashCode();}
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

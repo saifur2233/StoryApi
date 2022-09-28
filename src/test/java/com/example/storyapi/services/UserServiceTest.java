@@ -45,6 +45,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("GET user find by email - Success")
     void testUserFindByEmailSuccess() {
+        Users dummyUser1 = new Users("saifur","Saif123","12186828618");
         UserDTO mockUser = new UserDTO(1, "Saifur","saif@gmail.com", "1798277732");
         Users user = new Users(1, "Saifur","saif@gmail.com", "Saifur123", "1798277732");
         doReturn(Optional.of(user)).when(userRepository).findByEmail("saif@gmail.com");

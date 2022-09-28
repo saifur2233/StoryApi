@@ -75,7 +75,10 @@ void testSignInUserNotFound(){
 
         Users user = authService.signUp(postUser);
         verify(userRepository).save(captor.capture());
-        //Users captureUser = captor.getValue();
+        //System.out.println("User 1"+ user);
+        //System.out.println("user 2"+ captor.getValue());
+        Users captureUser = captor.getValue();
+        Assertions.assertNotNull(captureUser);
         Assertions.assertEquals(mockUser,user);
     }
 
