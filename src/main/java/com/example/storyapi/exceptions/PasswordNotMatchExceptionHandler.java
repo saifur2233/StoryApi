@@ -9,14 +9,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 
 @Component
-public class JWTExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<JWTException> {
+public class PasswordNotMatchExceptionHandler extends ResponseEntityExceptionHandler implements RestExceptionHandler<PasswordNotMatchException>{
+    @ExceptionHandler(PasswordNotMatchException.class)
     @Override
-    @ExceptionHandler(JWTException.class)
-    public ResponseEntity<Object> handleException(JWTException ex) {
-        System.out.println("Signature");
+    public ResponseEntity<Object> handleException(PasswordNotMatchException ex) {
         ApiError apiError = new ApiError();
         apiError.message.add(ex.getMessage());
-        apiError.setStatus(HttpStatus.UNAUTHORIZED);
+        apiError.setStatus(HttpStatus.BAD_REQUEST);
         apiError.setTimestamp(LocalDateTime.now());
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }

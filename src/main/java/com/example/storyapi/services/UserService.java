@@ -61,7 +61,6 @@ public class UserService {
         if (existEmail.isPresent() && !(id.equals(existEmail.get().getId()))){
             throw new DuplicateEmailException(Users.class, " Email ", existEmail.get().getEmail());
         }
-
         userUpdateSetProperties.setUserProperties(userObj.get(), users);
         userRepository.save(userObj.get());
         return userConverter.entityToDto(userObj.get());

@@ -84,7 +84,7 @@ public class StoryServiceTest {
 
         Exception exception = Assertions.assertThrows(EntityNotFoundException.class, () -> storyService.getStory(100));
         String actualMessage = exception.getMessage();
-        //System.out.println("Message: "+actualMessage);
+
         String expectedMessage = "Story not found with id 100";
         assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -163,7 +163,7 @@ public class StoryServiceTest {
 
         Exception exception = Assertions.assertThrows(EntityNotFoundException.class, () -> storyService.updateStory(200, mockstory));
         String actualMessage = exception.getMessage();
-        System.out.println(actualMessage);
+
         String expectedMessage = "Story not found with id 200";
         Assertions.assertTrue(actualMessage.contains(expectedMessage));
     }
@@ -186,7 +186,6 @@ public class StoryServiceTest {
 
         Exception exception = Assertions.assertThrows(EntityNotFoundException.class, () -> storyService.deleteStory(100));
         String actualMessage = exception.getMessage();
-        System.out.println(actualMessage);
         String expectedMessage = "Story not found with id 100";
         Assertions.assertTrue(actualMessage.contains(expectedMessage));
     }

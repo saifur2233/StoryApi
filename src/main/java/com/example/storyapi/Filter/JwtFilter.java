@@ -1,6 +1,5 @@
 package com.example.storyapi.Filter;
 
-import com.example.storyapi.exceptions.JWTException;
 import com.example.storyapi.security.JWTUtility;
 import com.example.storyapi.services.UserDetailsServiceInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +49,8 @@ public class JwtFilter extends OncePerRequestFilter{
             try{
                 email = jwtUtility.getEmailFromToken(token);
             }
-            catch (Exception e){
-                throw new JWTException(e.getMessage());
+            catch (RuntimeException e){
+                e.printStackTrace();
             }
         }
 

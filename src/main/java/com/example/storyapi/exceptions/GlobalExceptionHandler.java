@@ -12,11 +12,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
     @ExceptionHandler({Exception.class})
     @Override
     public ResponseEntity<Object> handleException(Exception ex) {
-        System.out.println("global");
         ApiError apiError = new ApiError();
         apiError.message.add(ex.getMessage());
         apiError.setStatus(HttpStatus.BAD_REQUEST);
         apiError.setTimestamp(LocalDateTime.now());
-        return new ResponseEntity<>(apiError, apiError.getStatus());
-    }
-}
+        return new ResponseEntity<>(apiError, apiError.getStatus());}}
