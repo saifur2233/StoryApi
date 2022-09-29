@@ -1,5 +1,6 @@
 package com.example.storyapi.controllers;
 
+import com.example.storyapi.exceptions.PasswordNotMatchException;
 import com.example.storyapi.models.Users;
 import com.example.storyapi.security.JWTUtility;
 import com.example.storyapi.services.AuthService;
@@ -17,10 +18,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.servlet.http.Cookie;
 import java.util.Optional;
 
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -74,27 +75,15 @@ public class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("GET user verify - Success")
-    void testVerifyUser()throws Exception{
-        String email = "saifur@gmail.com";
-        String token = "lojsdajadjnnsdanasdnknd";
-        doReturn(email).when(jwtUtility).getEmailFromToken(token);
+    @DisplayName("POST user Sign in - Password Not Match")
+    void testSignInPassNotMatch() throws Exception{
+        Users mockUser = new Users("saif77889911@gmail.com", "123");
+        when(authService.signIn(mockUser)).thenThrow(new PasswordNotMatchException(AuthControllerTest.class," ","Password"));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/verifyuser"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("GET user verify - Success")
-    void testVerifyUserFromToken()throws Exception{
-        Cookie cookies = new Cookie("lexus", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWlmQGdtYWlsLmNvbSIsImV4cCI6MTY2NDM0OTcyMywiaWF0IjoxNjY0MzMxNzIzfQ.cDc6M4M3-U7MJuPfQmhezGFNBHGRLG1HkfnJuxEdWUbZYNp_jtQS0esbZkyE5LPWwxkYG_LppGcoQWouicOZOw");
-        cookies.setMaxAge(7 * 24 * 60 * 60);
-        String email = "saif@gmail.com";
-        String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWlmQGdtYWlsLmNvbSIsImV4cCI6MTY2NDM0OTcyMywiaWF0IjoxNjY0MzMxNzIzfQ.cDc6M4M3-U7MJuPfQmhezGFNBHGRLG1HkfnJuxEdWUbZYNp_jtQS0esbZkyE5LPWwxkYG_LppGcoQWouicOZOw";
-        doReturn(email).when(jwtUtility).getEmailFromToken(token);
-
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/verifyuser"))
-                .andExpect(status().isOk());
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/signin")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(mockUser)))
+                .andExpect(status().isBadRequest());
     }
 
     private String asJsonString(final Users postUser) {

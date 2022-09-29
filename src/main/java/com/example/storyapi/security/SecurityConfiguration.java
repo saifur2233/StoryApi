@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 .permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers( urlPrefix+"/stories",urlPrefix+"/stories/search/{id}")
+                .antMatchers( urlPrefix+"/stories",urlPrefix+"/stories/search/{id}",urlPrefix+"/stories/{email}")
                 .permitAll()
                 .and()
                 .authorizeRequests()
