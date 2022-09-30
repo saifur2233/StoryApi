@@ -96,5 +96,16 @@ public class Users {
         return Objects.equals(getId(), other.id) && Objects.equals(getEmail(), other.email);
     }
 
-
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", password='" + password + '\'' +
+                ", created_At=" + created_At +
+                ", stories=" + stories +
+                '}';
+    }
 }

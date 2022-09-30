@@ -29,7 +29,7 @@ public class JWTUtilityTest {
     @BeforeEach
     void setUp() {
         email = "saif@gmail.com";
-        token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWlmQGdtYWlsLmNvbSIsImV4cCI6MTY2NDQyODA1MSwiaWF0IjoxNjY0NDEwMDUxfQ.Wonikn60OdbFmDIU-x9aCVvZmhH4RZE-VzKr74ohZlO91rcmw-Qc6J5fIO6cmuEV91EWcfD3Z-h002L79X-gkw";
+        token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWlmQGdtYWlsLmNvbSIsImV4cCI6MTY2NDQ0ODI3MSwiaWF0IjoxNjY0NDMwMjcxfQ.6wLxIZDAoTP6_iO7jlMGdgda3ctireNvwEOgxIG20lMFY5MYxT9ajKgnhfHyZYTZGjn4lpqAnzz1T5-udnETvg";
     }
 
     @Test
