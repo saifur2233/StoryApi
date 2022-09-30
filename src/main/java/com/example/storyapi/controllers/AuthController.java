@@ -29,45 +29,36 @@ public class AuthController {
     @Autowired
     private JwtService jwtService;
     private static final String COOKIE_NAME = "lexus";
-    @PostMapping(value = "/signup")
-    public ResponseEntity<?> signUp(@RequestBody Users users, HttpServletResponse response){
+    @PostMapping(value = "/signup") public ResponseEntity<?> signUp(@RequestBody Users users, HttpServletResponse response){
         Users signupUsers = authService.signUp(users);
         String token = jwtService.authenticate(signupUsers.getEmail());
         Cookie myCookie = CookieSetToken(token);
         response.addCookie(myCookie);
         return ResponseEntity.status(HttpStatus.CREATED).body(signupUsers.getEmail());
     }
-
-    @GetMapping(value = "/verifyuser")
-    public String verifyUser(HttpServletRequest request){
+    @GetMapping(value = "/verifyuser") public String verifyUser(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         String email = null;
-        if( cookies != null || cookies.length > 0 ) {
-            for( Cookie cookie : cookies ) {
-                if( (COOKIE_NAME).equals( cookie.getName() ) ) {
-                    if (cookie.getMaxAge() > 0){
-                        String cookieValue = cookie.getValue();
-                        email = jwtUtility.getEmailFromToken(cookieValue);
-                    }
-                }
-            }
-        }
+        if( cookies == null) return email;
+        for( Cookie cookie : cookies ) {
+            if((COOKIE_NAME).equals(cookie.getName()) && cookie.getMaxAge() > 0 ) {
+                String cookieValue = cookie.getValue();
+                email = jwtUtility.getEmailFromToken(cookieValue);
+            }}
         return email;
     }
     @PostMapping(value = "/signin") public ResponseEntity<?> signIn(@RequestBody Users users, HttpServletResponse response){
         Optional<Users> loggedUser = authService.signIn(users);
-        if (loggedUser.isEmpty()) {
-            throw new PasswordNotMatchException(AuthController.class,"Password","");}
+        if (loggedUser.isEmpty()) {throw new PasswordNotMatchException(AuthController.class,"Password","");}
         String token = jwtService.authenticate(loggedUser.get().getEmail());
         Cookie myCookie = CookieSetToken(token);
         response.addCookie(myCookie);
-        return ResponseEntity.status(HttpStatus.OK).body(loggedUser.get().getEmail());
-    }protected Cookie CookieSetToken(String token){
+        return ResponseEntity.status(HttpStatus.OK).body(loggedUser.get().getEmail());}
+    public Cookie CookieSetToken(String token){
         Cookie myCookie = new Cookie( "lexus", token );
         myCookie.setMaxAge(30000);
         myCookie.setHttpOnly(true);
-        return myCookie;
-    }
+        return myCookie;}
     @PostMapping(value = "/signout")
     public ResponseEntity<Void> signout(HttpServletRequest request,HttpServletResponse response){
         SecurityContextHolder.clearContext();

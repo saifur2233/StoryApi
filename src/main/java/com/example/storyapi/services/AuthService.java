@@ -25,7 +25,7 @@ public class AuthService {
             users.setPassword(passwordEncoder.encode(users.getPassword()));
             return userRepository.save(users);
         }
-        throw new InvalidPasswordException(Users.class,"Invalid Password ", users.getPassword());
+        throw new InvalidPasswordException(Users.class,"Invalid Password Format ", users.getPassword());
     }
 
     public Optional<Users> signIn(Users users){
@@ -35,7 +35,6 @@ public class AuthService {
             return validUser;
         }
         return Optional.empty();
-
     }
 
 }

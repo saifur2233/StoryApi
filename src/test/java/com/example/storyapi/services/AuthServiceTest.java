@@ -64,9 +64,9 @@ void testSignInUserNotFound(){
     @Test
     @DisplayName("POST user sign up - Success")
     void testUserSignUp(){
-    Users postUser = new Users( "Saifur","saif88@gmail.com", "Saifur123", "1798277732");
+    Users postUser = new Users( 1,"Saifur","saif88@gmail.com", "Saifur123", "1798277732");
     Users mockUser = new Users(1, "Saifur","saif88@gmail.com", "Saifur123", "1798277732");
-    doReturn(Optional.of(mockUser)).when(userRepository).findByEmail("saif99@gmail.com");
+    doReturn(Optional.empty()).when(userRepository).findByEmail("saif88@gmail.com");
     String encodePassword = "kjksdjjksdj";
         doReturn(encodePassword).when(passwordEncoder).encode(postUser.getPassword());
         doReturn(mockUser).when(userRepository).save(postUser);
@@ -75,11 +75,12 @@ void testSignInUserNotFound(){
 
         Users user = authService.signUp(postUser);
         verify(userRepository).save(captor.capture());
-        //System.out.println("User 1"+ user);
+        //System.out.println("User 1"+ mockUser);
         //System.out.println("user 2"+ captor.getValue());
         Users captureUser = captor.getValue();
         Assertions.assertNotNull(captureUser);
         Assertions.assertEquals(mockUser,user);
+        Assertions.assertEquals(captureUser,mockUser);
     }
 
     @Test
